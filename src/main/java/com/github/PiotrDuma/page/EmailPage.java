@@ -20,7 +20,7 @@ public class EmailPage extends AbstractPageObject {
   }
 
   @Override
-  protected AbstractPageObject openPage() {
+  public AbstractPageObject openPage() {
     log.info("open email page");
     String url = loadVariable(URL_KEY);
     driver.navigate().to(url);

@@ -37,6 +37,10 @@ public abstract class AbstractPageObject {
     wait.until(ExpectedConditions.visibilityOf(element));
   }
 
+  protected void waitForElementToDisappear(WebElement element) {
+    wait.until(ExpectedConditions.invisibilityOf(element));
+  }
+
   protected String loadVariable(String variableKey) {
     return PropertyReader.getProperty(variableKey);
   }

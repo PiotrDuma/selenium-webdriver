@@ -16,6 +16,8 @@ public class LoginPage extends AbstractPageObject {
   private WebElement passwordField;
   @FindBy(css = "button[type='submit']")
   private WebElement signInButton;
+  @FindBy(xpath = "//div[@class='h-full']")
+  private WebElement loadingImage;
 
   public LoginPage(WebDriver driver) {
     super(driver);
@@ -27,11 +29,12 @@ public class LoginPage extends AbstractPageObject {
     log.info("open login page");
     String url = loadVariable(URL_KEY);
     driver.navigate().to(url);
-    waitForElementToLoad(loginField);
     return this;
   }
 
   public EmailPage login(String username, String password) {
+    waitForElementToDisappear(loadingImage);
+    waitForElementToLoad(loginField);
     fillElementWithText(loginField, username);
     fillElementWithText(passwordField, password);
     clickElement(signInButton);
