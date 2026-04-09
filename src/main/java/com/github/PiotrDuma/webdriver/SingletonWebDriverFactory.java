@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 public class SingletonWebDriverFactory {
 
-  private static final Logger logger = LoggerFactory.getLogger(SingletonWebDriverFactory.class);
+  private static final Logger log = LoggerFactory.getLogger(SingletonWebDriverFactory.class);
   private static final String LOG_INFO = "Init WebDriver: %s";
   private static final String SYSTEM_BROWSER_PROPERTY = "browser";
   private static final ThreadLocal<WebDriver> webDriver = new ThreadLocal<>();
@@ -19,15 +19,16 @@ public class SingletonWebDriverFactory {
 
   // TODO: extend factory with another browsers
   public static WebDriver getWebDriver() {
+
     if (webDriver.get() == null) {
       switch (getBrowserPropertyValue()) {
         case "firefox" -> {
-          logger.info(String.format(LOG_INFO, "Firefox WebDriver"));
+          log.info(String.format(LOG_INFO, "Firefox WebDriver"));
           WebDriverManager.firefoxdriver().setup();
           webDriver.set(new FirefoxDriver());
         }
         default -> {
-          logger.warn(String.format(LOG_INFO, "DEFAULT DRIVER: Firefox WebDriver"));
+          log.warn(String.format(LOG_INFO, "DEFAULT DRIVER: Firefox WebDriver"));
           WebDriverManager.firefoxdriver().setup();
           webDriver.set(new FirefoxDriver());
         }
@@ -41,7 +42,7 @@ public class SingletonWebDriverFactory {
     WebDriver driver = webDriver.get();
     if (driver != null) {
       try {
-        logger.info("Terminate WebDriver");
+        log.info("Terminate WebDriver");
         driver.quit();
       } finally {
         webDriver.remove();

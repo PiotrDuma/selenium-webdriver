@@ -20,6 +20,10 @@ public abstract class AbstractPageObject {
     PageFactory.initElements(driver, this);
   }
 
+  public String getCurrentUrl() {
+    return this.driver.getCurrentUrl();
+  }
+
   protected abstract AbstractPageObject openPage();
 
   protected void clickElement(WebElement element) {
