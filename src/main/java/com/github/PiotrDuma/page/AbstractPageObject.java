@@ -20,10 +20,6 @@ public abstract class AbstractPageObject {
     PageFactory.initElements(driver, this);
   }
 
-  public String getCurrentUrl() {
-    return this.driver.getCurrentUrl();
-  }
-
   protected abstract AbstractPageObject openPage();
 
   protected void clickElement(WebElement element) {
@@ -35,6 +31,10 @@ public abstract class AbstractPageObject {
     wait.until(ExpectedConditions.elementToBeClickable(element));
     element.clear();
     element.sendKeys(text);
+  }
+
+  protected void waitForElementToLoad(WebElement element) {
+    wait.until(ExpectedConditions.visibilityOf(element));
   }
 
   protected String loadVariable(String variableKey) {

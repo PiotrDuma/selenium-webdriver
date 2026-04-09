@@ -27,13 +27,14 @@ public class LoginPage extends AbstractPageObject {
     log.info("open login page");
     String url = loadVariable(URL_KEY);
     driver.navigate().to(url);
+    waitForElementToLoad(loginField);
     return this;
   }
 
-  public AbstractPageObject login(String username, String password) {
+  public EmailPage login(String username, String password) {
     fillElementWithText(loginField, username);
     fillElementWithText(passwordField, password);
     clickElement(signInButton);
-    return null;
+    return new EmailPage(driver);
   }
 }
