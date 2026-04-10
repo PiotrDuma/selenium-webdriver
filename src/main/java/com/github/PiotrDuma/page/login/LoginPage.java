@@ -1,5 +1,7 @@
-package com.github.PiotrDuma.page;
+package com.github.PiotrDuma.page.login;
 
+import com.github.PiotrDuma.page.AbstractPageObject;
+import com.github.PiotrDuma.page.email.EmailPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -16,8 +18,6 @@ public class LoginPage extends AbstractPageObject {
   private WebElement passwordField;
   @FindBy(css = "button[type='submit']")
   private WebElement signInButton;
-  @FindBy(xpath = "//div[@class='h-full']")
-  private WebElement loadingImage;
 
   public LoginPage(WebDriver driver) {
     super(driver);
@@ -33,7 +33,7 @@ public class LoginPage extends AbstractPageObject {
   }
 
   public EmailPage login(String username, String password) {
-    waitForElementToDisappear(loadingImage);
+    waitForLoadingElementToDisappear();
     waitForElementToLoad(loginField);
     fillElementWithText(loginField, username);
     fillElementWithText(passwordField, password);

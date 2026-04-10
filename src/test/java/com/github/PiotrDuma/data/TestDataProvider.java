@@ -15,4 +15,12 @@ public class TestDataProvider {
         {"test_user_epam_1234@proton.me", "<a1b2c3d4>"}
     };
   }
+
+  @DataProvider(name = "email")
+  public Object[][] getEmailValues() {
+    log.info("Access email data");
+    return new Object[][]{
+        {"test_user_epam_1234@proton.me", "SUBJECT 12345", "MESSAGE 12345"}
+    };
+  }
 }

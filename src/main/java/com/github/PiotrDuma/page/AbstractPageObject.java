@@ -4,15 +4,19 @@ import com.github.PiotrDuma.utils.PropertyReader.PropertyReader;
 import java.time.Duration;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public abstract class AbstractPageObject {
 
-  protected static final int WAIT_TIMEOUT_SECONDS = 10;
+  protected static final int WAIT_TIMEOUT_SECONDS = 30;
   protected WebDriver driver;
   protected WebDriverWait wait;
+
+  @FindBy(xpath = "//div[@class='h-full']")
+  private WebElement loadingImage;
 
   protected AbstractPageObject(WebDriver driver) {
     this.driver = driver;
@@ -37,8 +41,8 @@ public abstract class AbstractPageObject {
     wait.until(ExpectedConditions.visibilityOf(element));
   }
 
-  protected void waitForElementToDisappear(WebElement element) {
-    wait.until(ExpectedConditions.invisibilityOf(element));
+  protected void waitForLoadingElementToDisappear() {
+    wait.until(ExpectedConditions.invisibilityOf(loadingImage));
   }
 
   protected String loadVariable(String variableKey) {
