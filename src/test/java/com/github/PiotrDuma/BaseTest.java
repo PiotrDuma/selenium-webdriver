@@ -1,7 +1,7 @@
 package com.github.PiotrDuma;
 
 
-import com.github.PiotrDuma.utils.TestListener.TestListener;
+import com.github.PiotrDuma.utils.listener.TestListener;
 import com.github.PiotrDuma.webdriver.SingletonWebDriverFactory;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterClass;

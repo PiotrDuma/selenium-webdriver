@@ -1,6 +1,6 @@
 package com.github.PiotrDuma.webdriver;
 
-import com.github.PiotrDuma.utils.PropertyReader.PropertyReader;
+import com.github.PiotrDuma.utils.propertyreader.PropertyReader;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;

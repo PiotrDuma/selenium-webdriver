@@ -1,7 +1,8 @@
 package com.github.PiotrDuma.page;
 
-import com.github.PiotrDuma.utils.PropertyReader.PropertyReader;
+import com.github.PiotrDuma.utils.propertyreader.PropertyReader;
 import java.time.Duration;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -9,22 +10,23 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public abstract class AbstractPageObject {
+@Slf4j
+public abstract class BasePage {
 
-  protected static final int WAIT_TIMEOUT_SECONDS = 30;
+  protected static final int WAIT_TIMEOUT_SECONDS = Integer.parseInt(loadVariable("timeout"));
   protected WebDriver driver;
   protected WebDriverWait wait;
 
   @FindBy(xpath = "//div[@class='h-full']")
   private WebElement loadingImage;
 
-  protected AbstractPageObject(WebDriver driver) {
+  protected BasePage(WebDriver driver) {
     this.driver = driver;
     this.wait = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS));
     PageFactory.initElements(driver, this);
   }
 
-  protected abstract AbstractPageObject openPage();
+  protected abstract <T extends BasePage> T openPage();
 
   protected void clickElement(WebElement element) {
     wait.until(ExpectedConditions.elementToBeClickable(element));
@@ -33,7 +35,6 @@ public abstract class AbstractPageObject {
 
   protected void fillElementWithText(WebElement element, String text) {
     wait.until(ExpectedConditions.elementToBeClickable(element));
-    element.clear();
     element.sendKeys(text);
   }
 
@@ -45,7 +46,7 @@ public abstract class AbstractPageObject {
     wait.until(ExpectedConditions.invisibilityOf(loadingImage));
   }
 
-  protected String loadVariable(String variableKey) {
+  protected static String loadVariable(String variableKey) {
     return PropertyReader.getProperty(variableKey);
   }
 }

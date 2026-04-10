@@ -1,51 +1,55 @@
 package com.github.PiotrDuma.page.email.module;
 
-import com.github.PiotrDuma.page.AbstractPageObject;
+import com.github.PiotrDuma.page.BasePage;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class EmailWindow extends AbstractPageObject {
+@Slf4j
+public class MessageWindow extends BasePage {
 
-  private static final Logger log = LoggerFactory.getLogger(EmailWindow.class);
   private static final String EDITOR_SELECTOR = "[contenteditable='true']";
   private static final String RECIPIENT_SELECTOR = ".max-w-full.text-ellipsis";
-
-  @FindBy(xpath = "//input[@data-testid='composer:to']")
+  private static final String RECIPIENT_FIELD = "//input[@data-testid='composer:to']";
+  private static final String SUBJECT_FIELD = "//input[@data-testid='composer:subject']";
+  private static final String RECIPIENT_CONTAINER = "//div[@data-testid='composer:address']";
+  @FindBy(xpath = RECIPIENT_FIELD)
   private WebElement recipientField;
-  @FindBy(xpath = "//div[@data-testid='composer:address']")
+  @FindBy(xpath = RECIPIENT_CONTAINER)
   private WebElement recipientContainer;
-  @FindBy(xpath = "//input[@data-testid='composer:subject']")
+  @FindBy(xpath = SUBJECT_FIELD)
   private WebElement subjectField;
   @FindBy(css = "iframe[data-testid='rooster-iframe']")
   private WebElement messageFrame;
 
-  public EmailWindow(WebDriver driver) {
+  public MessageWindow(WebDriver driver) {
     super(driver);
   }
 
   @Override
-  protected AbstractPageObject openPage() {
-    return null;
+  protected MessageWindow openPage() {
+    return this;
   }
 
   public void setRecipient(String recipient) {
+    log.info(String.format("Pass '%s' value to the '%s' field", recipient, RECIPIENT_FIELD));
     fillElementWithText(recipientField, recipient);
   }
 
   public void setSubject(String subject) {
+    log.info(String.format("Pass '%s' value to the '%s' field", subject, SUBJECT_FIELD));
     fillElementWithText(subjectField, subject);
   }
 
   public void setMessage(String message) {
-    WebElement editor = getEditorWebElement();
+    log.info("Set email's message text field");
+    WebElement editor = getEditorWindow();
     editor.click();
     cleanField(editor);
     editor.sendKeys(message);
@@ -53,22 +57,27 @@ public class EmailWindow extends AbstractPageObject {
   }
 
   public List<String> getRecipients() {
+    log.info(String.format("Get recipient '%s' list", RECIPIENT_CONTAINER));
     return getRecipientList().stream()
         .map(WebElement::getText)
         .collect(Collectors.toList());
   }
 
   public String getSubject() {
+    log.info(String.format("Get subject '%s' field value", SUBJECT_FIELD));
     return subjectField.getAttribute("value");
   }
 
   public String getMessage() {
-    String text = getEditorWebElement().getText();
+    WebElement editorWindow = getEditorWindow();
+    log.info("Get email message value");
+    String text = editorWindow.getText();
     closeEditorWindow();
     return text;
   }
 
   private void closeEditorWindow() {
+    log.info("Close editor iframe window");
     driver.switchTo().defaultContent();
   }
 
@@ -76,7 +85,8 @@ public class EmailWindow extends AbstractPageObject {
     return recipientContainer.findElements(By.cssSelector(RECIPIENT_SELECTOR));
   }
 
-  private WebElement getEditorWebElement() {
+  private WebElement getEditorWindow() {
+    log.info("Open editor iframe window");
     driver.switchTo().frame(messageFrame);
     By by = By.cssSelector(EDITOR_SELECTOR);
     return wait.until(ExpectedConditions.elementToBeClickable(by));

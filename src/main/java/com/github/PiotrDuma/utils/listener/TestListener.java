@@ -1,4 +1,4 @@
-package com.github.PiotrDuma.utils.TestListener;
+package com.github.PiotrDuma.utils.listener;
 
 import com.github.PiotrDuma.webdriver.SingletonWebDriverFactory;
 import java.io.File;

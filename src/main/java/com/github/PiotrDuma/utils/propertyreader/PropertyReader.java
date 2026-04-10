@@ -1,4 +1,4 @@
-package com.github.PiotrDuma.utils.PropertyReader;
+package com.github.PiotrDuma.utils.propertyreader;
 
 import java.io.IOException;
 import java.io.InputStream;
