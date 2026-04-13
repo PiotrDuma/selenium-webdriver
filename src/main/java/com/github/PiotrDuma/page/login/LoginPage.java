@@ -20,6 +20,12 @@ public class LoginPage extends BasePage {
   private WebElement passwordField;
   @FindBy(css = SIGN_IN_BUTTON)
   private WebElement signInButton;
+  @FindBy(id = "id-4")
+  private WebElement loginErrorMessage;
+  @FindBy(id = "id-5")
+  private WebElement passwordErrorMessage;
+  @FindBy(css = "div[data-testid=\"login:error-block\"]")
+  private WebElement errorMessage;
 
   public LoginPage(WebDriver driver) {
     super(driver);
@@ -45,10 +51,29 @@ public class LoginPage extends BasePage {
     fillElementWithText(passwordField, password);
   }
 
-  public InboxPage clickSignInToLogin() {
+  public void clickSignInButton() {
     log.info(String.format("Click on '%s' button to sign in", SIGN_IN_BUTTON));
     waitForLoadingElementToDisappear();
     clickElement(signInButton);
+  }
+
+  public InboxPage clickSignInToLogin() {
+    clickSignInButton();
     return new InboxPage(driver);
+  }
+
+  public boolean isLoginMessageDisplayed() {
+    super.waitForElementToLoad(loginErrorMessage);
+    return loginErrorMessage.isDisplayed();
+  }
+
+  public boolean isPasswordMessageDisplayed() {
+    super.waitForElementToLoad(passwordErrorMessage);
+    return passwordErrorMessage.isDisplayed();
+  }
+
+  public boolean isErrorMessageDisplayed() {
+    super.waitForElementToLoad(errorMessage);
+    return errorMessage.isDisplayed();
   }
 }
