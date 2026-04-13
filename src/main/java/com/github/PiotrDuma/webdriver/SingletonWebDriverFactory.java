@@ -4,6 +4,7 @@ import com.github.PiotrDuma.utils.propertyreader.PropertyReader;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 @Slf4j
@@ -25,6 +26,11 @@ public class SingletonWebDriverFactory {
           log.info(String.format(LOG_INFO, "Firefox WebDriver"));
           WebDriverManager.firefoxdriver().setup();
           webDriver.set(new FirefoxDriver());
+        }
+        case "chrome" -> {
+          log.info(String.format(LOG_INFO, "Chrome WebDriver"));
+          WebDriverManager.chromedriver().setup();
+          webDriver.set(new ChromeDriver());
         }
         default -> {
           log.warn(String.format(LOG_INFO, "DEFAULT DRIVER: Firefox WebDriver"));
