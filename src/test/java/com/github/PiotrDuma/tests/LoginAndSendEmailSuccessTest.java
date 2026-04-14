@@ -69,6 +69,7 @@ public class LoginAndSendEmailSuccessTest {
         .isEqualTo(message);
   }
 
+
   @DataProvider(name = "credentials")
   public Object[][] getCredentials() {
     log.info("Access credentials data");
