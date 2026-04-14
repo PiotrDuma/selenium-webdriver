@@ -50,9 +50,9 @@ public class MessageWindow extends BasePage {
   public void setMessage(String message) {
     log.info("Set email's message text field");
     WebElement editor = getEditorWindow();
-    editor.click();
+    clickElement(editor);
     cleanField(editor);
-    editor.sendKeys(message);
+    fillElementWithText(editor, message);
     closeEditorWindow();
   }
 

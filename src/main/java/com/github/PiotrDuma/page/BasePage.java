@@ -14,6 +14,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public abstract class BasePage {
 
   protected static final int WAIT_TIMEOUT_SECONDS = Integer.parseInt(loadVariable("timeout"));
+  protected static final int SLOW_MODE_WAIT_SECONDS = Integer.parseInt(loadVariable("wait"));
   protected WebDriver driver;
   protected WebDriverWait wait;
 
@@ -30,12 +31,14 @@ public abstract class BasePage {
 
   protected void clickElement(WebElement element) {
     wait.until(ExpectedConditions.elementToBeClickable(element));
+    slowMode();
     element.click();
   }
 
   protected void fillElementWithText(WebElement element, String text) {
     wait.until(ExpectedConditions.elementToBeClickable(element));
     element.sendKeys(text);
+    slowMode();
   }
 
   protected void waitForElementToLoad(WebElement element) {
@@ -48,5 +51,13 @@ public abstract class BasePage {
 
   protected static String loadVariable(String variableKey) {
     return PropertyReader.getProperty(variableKey);
+  }
+
+  private void slowMode() {
+    try {
+      Thread.sleep(SLOW_MODE_WAIT_SECONDS * 1000L);
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+    }
   }
 }

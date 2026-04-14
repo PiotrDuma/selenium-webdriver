@@ -43,6 +43,7 @@ public class LoginFailureTest {
   void shouldFailLoginWithInvalidPassword(String username, String password) {
     log.info(String.format("Test login with invalid password: %s AND %s", username, password));
     LoginPage loginPage = setCredentialsAndClickLogin(username, password);
+    loginPage.clickSignInButton();
 
     assertThat(loginPage.isErrorMessageDisplayed())
         .as("Check if login failed - invalid password")
