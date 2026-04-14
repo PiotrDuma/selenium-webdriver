@@ -31,7 +31,7 @@ public class LoginFailureTest {
   @Test(dataProvider = "invalidUsername")
   void shouldFailLoginWithInvalidUsername(String username, String password) {
     log.info(String.format("Test login with invalid username: %s AND %s", username, password));
-    LoginPage loginPage = setCredentialsAndClickLogin(username, password);
+    LoginPage loginPage = getLoginPageWithCredentials(username, password);
     loginPage.clickSignInButton();
 
     assertThat(loginPage.isErrorMessageDisplayed())
@@ -42,7 +42,7 @@ public class LoginFailureTest {
   @Test(dataProvider = "invalidPassword")
   void shouldFailLoginWithInvalidPassword(String username, String password) {
     log.info(String.format("Test login with invalid password: %s AND %s", username, password));
-    LoginPage loginPage = setCredentialsAndClickLogin(username, password);
+    LoginPage loginPage = getLoginPageWithCredentials(username, password);
     loginPage.clickSignInButton();
 
     assertThat(loginPage.isErrorMessageDisplayed())
@@ -53,7 +53,8 @@ public class LoginFailureTest {
   @Test(dataProvider = "invalidUsername")
   void shouldFailLoginWithBlankUsername(String username, String password) {
     log.info(String.format("Test login with invalid username: %s AND %s", username, password));
-    LoginPage loginPage = setCredentialsAndClickLogin("", password);
+    LoginPage loginPage = getLoginPageWithCredentials("", password);
+    loginPage.clickSignInButton();
 
     assertThat(loginPage.isLoginMessageDisplayed())
         .as("Check if login failed - blank username")
@@ -63,14 +64,15 @@ public class LoginFailureTest {
   @Test(dataProvider = "invalidPassword")
   void shouldFailLoginWithBlankPassword(String username, String password) {
     log.info(String.format("Test login with invalid username: %s AND %s", username, password));
-    LoginPage loginPage = setCredentialsAndClickLogin(username, "");
+    LoginPage loginPage = getLoginPageWithCredentials(username, "");
+    loginPage.clickSignInButton();
 
     assertThat(loginPage.isPasswordMessageDisplayed())
         .as("Check if login failed - blank password")
         .isTrue();
   }
 
-  private LoginPage setCredentialsAndClickLogin(String username, String password) {
+  private LoginPage getLoginPageWithCredentials(String username, String password) {
     LoginPage loginPage = new LoginPage(webDriver);
     loginPage.openPage();
 
