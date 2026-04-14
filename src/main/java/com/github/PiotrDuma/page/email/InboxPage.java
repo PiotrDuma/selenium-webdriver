@@ -2,21 +2,24 @@ package com.github.PiotrDuma.page.email;
 
 import com.github.PiotrDuma.page.BasePage;
 import com.github.PiotrDuma.page.email.module.MessageWindow;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 @Slf4j
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class InboxPage extends BasePage {
 
-  private static final String URL = "https://mail.proton.me";
-  private static final String NEW_MESSAGE_BUTTON = "//button[@data-testid='sidebar:compose']";
-  private static final String EMAIL_IDENTIFIER = ".user-dropdown-email";
+  static final String URL = "https://mail.proton.me";
+  static final String NEW_MESSAGE_BUTTON = "//button[@data-testid='sidebar:compose']";
+  static final String EMAIL_IDENTIFIER = ".user-dropdown-email";
   @FindBy(css = EMAIL_IDENTIFIER)
-  private WebElement emailAddressSpan;
+  WebElement emailAddressSpan;
   @FindBy(xpath = NEW_MESSAGE_BUTTON)
-  private WebElement newMessageButton;
+  WebElement newMessageButton;
 
   public InboxPage(WebDriver driver) {
     super(driver);

@@ -2,6 +2,8 @@ package com.github.PiotrDuma.page;
 
 import com.github.PiotrDuma.utils.propertyreader.PropertyReader;
 import java.time.Duration;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,12 +13,13 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 @Slf4j
+@FieldDefaults(level = AccessLevel.PROTECTED)
 public abstract class BasePage {
 
-  protected static final int WAIT_TIMEOUT_SECONDS = Integer.parseInt(loadVariable("timeout"));
-  protected static final int SLOW_MODE_WAIT_SECONDS = Integer.parseInt(loadVariable("wait"));
-  protected WebDriver driver;
-  protected WebDriverWait wait;
+  static final int WAIT_TIMEOUT_SECONDS = Integer.parseInt(loadVariable("timeout"));
+  static final int SLOW_MODE_WAIT_SECONDS = Integer.parseInt(loadVariable("wait"));
+  WebDriver driver;
+  WebDriverWait wait;
 
   @FindBy(xpath = "//div[@class='h-full']")
   private WebElement loadingImage;

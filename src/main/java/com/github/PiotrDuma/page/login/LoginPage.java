@@ -2,30 +2,33 @@ package com.github.PiotrDuma.page.login;
 
 import com.github.PiotrDuma.page.BasePage;
 import com.github.PiotrDuma.page.email.InboxPage;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 @Slf4j
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class LoginPage extends BasePage {
 
-  private static final String URL = "https://account.proton.me/mail";
-  private static final String USERNAME_FIELD = "username";
-  private static final String PASSWORD_FIELD = "password";
-  private static final String SIGN_IN_BUTTON = "button[type='submit']";
+  static final String URL = "https://account.proton.me/mail";
+  static final String USERNAME_FIELD = "username";
+  static final String PASSWORD_FIELD = "password";
+  static final String SIGN_IN_BUTTON = "button[type='submit']";
   @FindBy(id = USERNAME_FIELD)
-  private WebElement loginField;
+  WebElement loginField;
   @FindBy(id = PASSWORD_FIELD)
-  private WebElement passwordField;
+  WebElement passwordField;
   @FindBy(css = SIGN_IN_BUTTON)
-  private WebElement signInButton;
+  WebElement signInButton;
   @FindBy(id = "id-4")
-  private WebElement loginErrorMessage;
+  WebElement loginErrorMessage;
   @FindBy(id = "id-5")
-  private WebElement passwordErrorMessage;
+  WebElement passwordErrorMessage;
   @FindBy(css = "div[data-testid=\"login:error-block\"]")
-  private WebElement errorMessage;
+  WebElement errorMessage;
 
   public LoginPage(WebDriver driver) {
     super(driver);

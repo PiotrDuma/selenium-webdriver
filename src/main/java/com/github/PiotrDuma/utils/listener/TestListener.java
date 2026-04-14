@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
@@ -14,10 +16,11 @@ import org.testng.ITestListener;
 import org.testng.ITestResult;
 
 @Slf4j
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class TestListener implements ITestListener {
 
-  private static final String TIMESTAMP_FORMAT = "yyyy_MM_dd-HH_mm_ss";
-  private static final String SCREENSHOT_PATH = "screenshots/";
+  static final String TIMESTAMP_FORMAT = "yyyy_MM_dd-HH_mm_ss";
+  static final String SCREENSHOT_PATH = "screenshots/";
 
   @Override
   public void onTestFailure(ITestResult result) {

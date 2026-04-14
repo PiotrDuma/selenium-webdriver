@@ -4,16 +4,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
 import java.util.Properties;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class PropertyReader {
 
-  private static final String FILE_EXCEPTION = "Failed to load '%s' file.";
-  private static final String PROPERTY_EXCEPTION = "Failed to load property with given key: %s";
-  private static final String CONFIG_VARIABLE = "config";
-  private static final String DEFAULT_CONFIG_FILE = "default.properties";
-  private static final Properties properties;
+  static final String FILE_EXCEPTION = "Failed to load '%s' file.";
+  static final String PROPERTY_EXCEPTION = "Failed to load property with given key: %s";
+  static final String CONFIG_VARIABLE = "config";
+  static final String DEFAULT_CONFIG_FILE = "default.properties";
+  static final Properties properties;
 
   static {
     String resourceFileName = getResourceFileName();

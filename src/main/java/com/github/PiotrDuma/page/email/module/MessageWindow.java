@@ -3,6 +3,8 @@ package com.github.PiotrDuma.page.email.module;
 import com.github.PiotrDuma.page.BasePage;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -12,21 +14,22 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 @Slf4j
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class MessageWindow extends BasePage {
 
-  private static final String EDITOR_SELECTOR = "[contenteditable='true']";
-  private static final String RECIPIENT_SELECTOR = ".max-w-full.text-ellipsis";
-  private static final String RECIPIENT_FIELD = "//input[@data-testid='composer:to']";
-  private static final String SUBJECT_FIELD = "//input[@data-testid='composer:subject']";
-  private static final String RECIPIENT_CONTAINER = "//div[@data-testid='composer:address']";
+  static final String EDITOR_SELECTOR = "[contenteditable='true']";
+  static final String RECIPIENT_SELECTOR = ".max-w-full.text-ellipsis";
+  static final String RECIPIENT_FIELD = "//input[@data-testid='composer:to']";
+  static final String SUBJECT_FIELD = "//input[@data-testid='composer:subject']";
+  static final String RECIPIENT_CONTAINER = "//div[@data-testid='composer:address']";
   @FindBy(xpath = RECIPIENT_FIELD)
-  private WebElement recipientField;
+  WebElement recipientField;
   @FindBy(xpath = RECIPIENT_CONTAINER)
-  private WebElement recipientContainer;
+  WebElement recipientContainer;
   @FindBy(xpath = SUBJECT_FIELD)
-  private WebElement subjectField;
+  WebElement subjectField;
   @FindBy(css = "iframe[data-testid='rooster-iframe']")
-  private WebElement messageFrame;
+  WebElement messageFrame;
 
   public MessageWindow(WebDriver driver) {
     super(driver);

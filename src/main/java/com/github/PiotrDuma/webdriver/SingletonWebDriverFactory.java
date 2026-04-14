@@ -2,22 +2,24 @@ package com.github.PiotrDuma.webdriver;
 
 import com.github.PiotrDuma.utils.propertyreader.PropertyReader;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 @Slf4j
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class SingletonWebDriverFactory {
 
-  private static final String LOG_INFO = "Init WebDriver: %s";
-  private static final String SYSTEM_BROWSER_PROPERTY = "browser";
-  private static final ThreadLocal<WebDriver> webDriver = new ThreadLocal<>();
+  static final String LOG_INFO = "Init WebDriver: %s";
+  static final String SYSTEM_BROWSER_PROPERTY = "browser";
+  static final ThreadLocal<WebDriver> webDriver = new ThreadLocal<>();
 
   private SingletonWebDriverFactory() {
   }
 
-  // TODO: extend factory with another browsers
   public static WebDriver getWebDriver() {
 
     if (webDriver.get() == null) {
