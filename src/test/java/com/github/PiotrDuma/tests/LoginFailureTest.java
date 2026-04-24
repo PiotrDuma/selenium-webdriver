@@ -4,6 +4,7 @@ import com.github.PiotrDuma.utils.listener.TestListener;
 import com.github.PiotrDuma.web.page.login.LoginPage;
 import lombok.extern.slf4j.Slf4j;
 import static org.assertj.core.api.Assertions.assertThat;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -12,12 +13,21 @@ import org.testng.annotations.Test;
 @Slf4j
 public class LoginFailureTest {
 
+  private LoginPage loginPage;
+
+  @BeforeMethod
+  void setUp() {
+    this.loginPage = new LoginPage()
+        .openPage();
+  }
 
   @Test(dataProvider = "invalidUsername")
   void shouldFailLoginWithInvalidUsername(String username, String password) {
     log.info(String.format("Test login with invalid username: %s AND %s", username, password));
-    LoginPage loginPage = getLoginPageWithCredentials(username, password);
-    loginPage.clickSignInButton();
+
+    loginPage.setUsername(username)
+        .setPassword(password)
+        .clickSignInButton();
 
     assertThat(loginPage.isErrorMessageDisplayed())
         .as("Check if login failed - invalid username")
@@ -27,8 +37,10 @@ public class LoginFailureTest {
   @Test(dataProvider = "invalidPassword")
   void shouldFailLoginWithInvalidPassword(String username, String password) {
     log.info(String.format("Test login with invalid password: %s AND %s", username, password));
-    LoginPage loginPage = getLoginPageWithCredentials(username, password);
-    loginPage.clickSignInButton();
+
+    loginPage.setUsername(username)
+        .setPassword(password)
+        .clickSignInButton();
 
     assertThat(loginPage.isErrorMessageDisplayed())
         .as("Check if login failed - invalid password")
@@ -38,8 +50,10 @@ public class LoginFailureTest {
   @Test(dataProvider = "invalidUsername")
   void shouldFailLoginWithBlankUsername(String username, String password) {
     log.info(String.format("Test login with invalid username: %s AND %s", username, password));
-    LoginPage loginPage = getLoginPageWithCredentials("", password);
-    loginPage.clickSignInButton();
+
+    loginPage.setUsername(username)
+        .setPassword(password)
+        .clickSignInButton();
 
     assertThat(loginPage.isLoginMessageDisplayed())
         .as("Check if login failed - blank username")
@@ -49,21 +63,14 @@ public class LoginFailureTest {
   @Test(dataProvider = "invalidPassword")
   void shouldFailLoginWithBlankPassword(String username, String password) {
     log.info(String.format("Test login with invalid username: %s AND %s", username, password));
-    LoginPage loginPage = getLoginPageWithCredentials(username, "");
-    loginPage.clickSignInButton();
+
+    loginPage.setUsername(username)
+        .setPassword(password)
+        .clickSignInButton();
 
     assertThat(loginPage.isPasswordMessageDisplayed())
         .as("Check if login failed - blank password")
         .isTrue();
-  }
-
-  private LoginPage getLoginPageWithCredentials(String username, String password) {
-    LoginPage loginPage = new LoginPage();
-    loginPage.openPage();
-
-    loginPage.setUsername(username);
-    loginPage.setPassword(password);
-    return loginPage;
   }
 
   @DataProvider(name = "invalidUsername")
