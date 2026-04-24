@@ -50,9 +50,15 @@ mvn clean test -Dconfig=dev.properties -DsuiteXmlFile=src/test/resources/testng.
 - extend webdriver factory with chrome browser;
 - change testng.xml options to run methods in parallel;
 
-### branch 1_1:
+### branch v1.1:
 - fix failure test cases;
 - add thread sleep (after click and setting text) to slow automation process;
 - add dev.properties file with chrome browser and slow mode option;
 - add Lombok private field setting;
 - add maven plugin to run testNG test suite;
+
+### branch v1.2:
+- move WebDriver init and close to basepage and listener;
+- add new abstraction layer for interaction with webdriver;
+- refactor class architecture, add generics;
+- clean test cases;
