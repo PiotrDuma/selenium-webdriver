@@ -1,7 +1,7 @@
-package com.github.PiotrDuma.page.email;
+package com.github.PiotrDuma.web.page.email;
 
-import com.github.PiotrDuma.page.BasePage;
-import com.github.PiotrDuma.page.email.module.MessageWindow;
+import com.github.PiotrDuma.web.page.BasePage;
+import com.github.PiotrDuma.web.window.MessageWindow;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,7 @@ import org.openqa.selenium.support.FindBy;
 
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class InboxPage extends BasePage {
+public class InboxPage extends BasePage<InboxPage> {
 
   static final String URL = "https://mail.proton.me";
   static final String NEW_MESSAGE_BUTTON = "//button[@data-testid='sidebar:compose']";
@@ -21,26 +21,19 @@ public class InboxPage extends BasePage {
   WebElement newMessageButton;
 
   public InboxPage() {
-    super();
+    super(URL);
     log.info("Init email page");
   }
 
-  @Override
-  public BasePage openPage() {
-    log.info(String.format("Open email page: ", URL));
-    driver.navigate().to(URL);
-    return this;
-  }
-
-  public MessageWindow getMessageWindow() {
+  public MessageWindow<InboxPage> clickNewMessageButton() {
     log.info(String.format("Click on 'new message' button: '%s'", NEW_MESSAGE_BUTTON));
     clickElement(newMessageButton);
-    return new MessageWindow();
+    return new MessageWindow<>(this);
   }
 
   public String getEmailSpanText() {
     log.info(String.format("Get email identifier text: %s", EMAIL_IDENTIFIER));
-    waitForLoadingElementToDisappear();
+    waitForLoadingImageToDisappear();
     waitForElementToLoad(emailAddressSpan);
     return emailAddressSpan.getText();
   }

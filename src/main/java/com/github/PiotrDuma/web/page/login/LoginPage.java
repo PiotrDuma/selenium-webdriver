@@ -1,7 +1,7 @@
-package com.github.PiotrDuma.page.login;
+package com.github.PiotrDuma.web.page.login;
 
-import com.github.PiotrDuma.page.BasePage;
-import com.github.PiotrDuma.page.email.InboxPage;
+import com.github.PiotrDuma.web.page.BasePage;
+import com.github.PiotrDuma.web.page.email.InboxPage;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,7 @@ import org.openqa.selenium.support.FindBy;
 
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class LoginPage extends BasePage {
+public class LoginPage extends BasePage<LoginPage> {
 
   static final String URL = "https://account.proton.me/mail";
   static final String USERNAME_FIELD = "username";
@@ -30,52 +30,43 @@ public class LoginPage extends BasePage {
   WebElement errorMessage;
 
   public LoginPage() {
-    super();
+    super(URL);
     log.info("Init login page");
   }
 
-  @Override
-  public LoginPage openPage() {
-    log.info(String.format("Open login page: %s", URL));
-    driver.navigate().to(URL);
+  public LoginPage setUsername(String username) {
+    log.info(String.format("Fill '%s' field with value %s", USERNAME_FIELD, username));
+    waitForLoadingImageToDisappear();
+    fillElementWithText(loginField, username);
     return this;
   }
 
-  public void setUsername(String username) {
-    log.info(String.format("Fill '%s' field with value %s", USERNAME_FIELD, username));
-    waitForLoadingElementToDisappear();
-    fillElementWithText(loginField, username);
-  }
-
-  public void setPassword(String password) {
+  public LoginPage setPassword(String password) {
     log.info(String.format("Fill '%s' field with value %s", PASSWORD_FIELD, password));
-    waitForLoadingElementToDisappear();
+    waitForLoadingImageToDisappear();
     fillElementWithText(passwordField, password);
+    return this;
   }
 
-  public void clickSignInButton() {
+  public InboxPage clickSignInButton() {
     log.info(String.format("Click on '%s' button to sign in", SIGN_IN_BUTTON));
-    waitForLoadingElementToDisappear();
+    waitForLoadingImageToDisappear();
     clickElement(signInButton);
-  }
-
-  public InboxPage clickSignInToLogin() {
-    clickSignInButton();
     return new InboxPage();
   }
 
   public boolean isLoginMessageDisplayed() {
-    super.waitForElementToLoad(loginErrorMessage);
+    waitForElementToLoad(loginErrorMessage);
     return loginErrorMessage.isDisplayed();
   }
 
   public boolean isPasswordMessageDisplayed() {
-    super.waitForElementToLoad(passwordErrorMessage);
+    waitForElementToLoad(passwordErrorMessage);
     return passwordErrorMessage.isDisplayed();
   }
 
   public boolean isErrorMessageDisplayed() {
-    super.waitForElementToLoad(errorMessage);
+    waitForElementToLoad(errorMessage);
     return errorMessage.isDisplayed();
   }
 }

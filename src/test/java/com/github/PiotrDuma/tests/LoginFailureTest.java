@@ -1,7 +1,7 @@
 package com.github.PiotrDuma.tests;
 
-import com.github.PiotrDuma.page.login.LoginPage;
 import com.github.PiotrDuma.utils.listener.TestListener;
+import com.github.PiotrDuma.web.page.login.LoginPage;
 import lombok.extern.slf4j.Slf4j;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.testng.annotations.DataProvider;

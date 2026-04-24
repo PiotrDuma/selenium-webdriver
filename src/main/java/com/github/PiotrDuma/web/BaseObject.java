@@ -1,4 +1,4 @@
-package com.github.PiotrDuma.page;
+package com.github.PiotrDuma.web;
 
 import com.github.PiotrDuma.utils.propertyreader.PropertyReader;
 import com.github.PiotrDuma.webdriver.SingletonWebDriverFactory;
@@ -8,36 +8,35 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 @Slf4j
 @FieldDefaults(level = AccessLevel.PROTECTED)
-public abstract class BasePage {
+public abstract class BaseObject {
 
   static final int WAIT_TIMEOUT_SECONDS = Integer.parseInt(loadVariable("timeout"));
   static final int SLOW_MODE_WAIT_SECONDS = Integer.parseInt(loadVariable("wait"));
   WebDriver driver;
   WebDriverWait wait;
 
-  @FindBy(xpath = "//div[@class='h-full']")
-  private WebElement loadingImage;
-
-  protected BasePage() {
+  public BaseObject() {
     this.driver = SingletonWebDriverFactory.getWebDriver();
-    ;
     this.wait = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS));
     PageFactory.initElements(driver, this);
   }
-
-  protected abstract <T extends BasePage> T openPage();
 
   protected void clickElement(WebElement element) {
     wait.until(ExpectedConditions.elementToBeClickable(element));
     slowMode();
     element.click();
+  }
+
+  protected void cleanField(WebElement element) {
+    wait.until(ExpectedConditions.elementToBeClickable(element));
+    slowMode();
+    element.clear();
   }
 
   protected void fillElementWithText(WebElement element, String text) {
@@ -50,15 +49,11 @@ public abstract class BasePage {
     wait.until(ExpectedConditions.visibilityOf(element));
   }
 
-  protected void waitForLoadingElementToDisappear() {
-    wait.until(ExpectedConditions.invisibilityOf(loadingImage));
-  }
-
   protected static String loadVariable(String variableKey) {
     return PropertyReader.getProperty(variableKey);
   }
 
-  private void slowMode() {
+  protected void slowMode() {
     try {
       Thread.sleep(SLOW_MODE_WAIT_SECONDS * 1000L);
     } catch (InterruptedException e) {
