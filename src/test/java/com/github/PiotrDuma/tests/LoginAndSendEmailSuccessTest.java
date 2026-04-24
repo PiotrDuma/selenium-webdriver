@@ -53,7 +53,7 @@ public class LoginAndSendEmailSuccessTest {
     assertThat(messageWindow.getRecipients().contains(recipient))
         .as("Check if recipient list contains provided email")
         .isTrue();
-    assertThat(messageWindow.getSubject())
+    assertThat(messageWindow.getSubjectFieldValueAttribute())
         .as("Check if subject field is filled correctly")
         .isEqualTo(subject);
     assertThat(messageWindow.openMessageEditorFrame().getEditorMessageText())

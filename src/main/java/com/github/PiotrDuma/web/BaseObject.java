@@ -3,9 +3,11 @@ package com.github.PiotrDuma.web;
 import com.github.PiotrDuma.utils.propertyreader.PropertyReader;
 import com.github.PiotrDuma.webdriver.SingletonWebDriverFactory;
 import java.time.Duration;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
@@ -47,6 +49,10 @@ public abstract class BaseObject {
 
   protected void waitForElementToLoad(WebElement element) {
     wait.until(ExpectedConditions.visibilityOf(element));
+  }
+
+  protected List<WebElement> findChildWebElementsBySelector(WebElement element, By selector) {
+    return element.findElements(selector);
   }
 
   protected static String loadVariable(String variableKey) {

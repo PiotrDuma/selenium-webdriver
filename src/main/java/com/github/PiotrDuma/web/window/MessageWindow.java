@@ -58,17 +58,14 @@ public class MessageWindow<P extends BasePage<?>> extends BaseObject {
 
   public List<String> getRecipients() {
     log.info(String.format("Get recipient '%s' list", RECIPIENT_CONTAINER));
-    return getRecipientList().stream()
+    return findChildWebElementsBySelector(recipientContainer, By.cssSelector(RECIPIENT_SELECTOR))
+        .stream()
         .map(WebElement::getText)
         .collect(Collectors.toList());
   }
 
-  public String getSubject() {
+  public String getSubjectFieldValueAttribute() {
     log.info(String.format("Get subject '%s' field value", SUBJECT_FIELD));
     return subjectField.getAttribute("value");
-  }
-
-  private List<WebElement> getRecipientList() {
-    return recipientContainer.findElements(By.cssSelector(RECIPIENT_SELECTOR));
   }
 }
