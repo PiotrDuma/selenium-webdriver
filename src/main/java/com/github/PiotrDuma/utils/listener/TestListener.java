@@ -23,6 +23,16 @@ public class TestListener implements ITestListener {
   static final String SCREENSHOT_PATH = "screenshots/";
 
   @Override
+  public void onTestSuccess(ITestResult result) {
+    closeDriver();
+  }
+
+  @Override
+  public void onTestSkipped(ITestResult result) {
+    closeDriver();
+  }
+
+  @Override
   public void onTestFailure(ITestResult result) {
     File file = getScreenshotAsFile();
     String destinationPath = getFilePath(result);
@@ -33,6 +43,8 @@ public class TestListener implements ITestListener {
     } catch (IOException e) {
       log.error("Screenshot save failure.");
       throw new RuntimeException(e);
+    } finally {
+      closeDriver();
     }
   }
 
@@ -53,5 +65,9 @@ public class TestListener implements ITestListener {
 
   private static String getTimestamp() {
     return new SimpleDateFormat(TIMESTAMP_FORMAT).format(new Date());
+  }
+
+  private static void closeDriver() {
+    SingletonWebDriverFactory.closeDriver();
   }
 }

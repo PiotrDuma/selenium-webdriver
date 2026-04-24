@@ -5,7 +5,6 @@ import com.github.PiotrDuma.page.email.module.MessageWindow;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -21,8 +20,8 @@ public class InboxPage extends BasePage {
   @FindBy(xpath = NEW_MESSAGE_BUTTON)
   WebElement newMessageButton;
 
-  public InboxPage(WebDriver driver) {
-    super(driver);
+  public InboxPage() {
+    super();
     log.info("Init email page");
   }
 
@@ -36,7 +35,7 @@ public class InboxPage extends BasePage {
   public MessageWindow getMessageWindow() {
     log.info(String.format("Click on 'new message' button: '%s'", NEW_MESSAGE_BUTTON));
     clickElement(newMessageButton);
-    return new MessageWindow(driver);
+    return new MessageWindow();
   }
 
   public String getEmailSpanText() {

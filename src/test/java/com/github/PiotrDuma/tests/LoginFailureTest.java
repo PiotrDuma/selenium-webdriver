@@ -2,12 +2,8 @@ package com.github.PiotrDuma.tests;
 
 import com.github.PiotrDuma.page.login.LoginPage;
 import com.github.PiotrDuma.utils.listener.TestListener;
-import com.github.PiotrDuma.webdriver.SingletonWebDriverFactory;
 import lombok.extern.slf4j.Slf4j;
 import static org.assertj.core.api.Assertions.assertThat;
-import org.openqa.selenium.WebDriver;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -16,17 +12,6 @@ import org.testng.annotations.Test;
 @Slf4j
 public class LoginFailureTest {
 
-  protected WebDriver webDriver;
-
-  @BeforeMethod
-  public void setup() {
-    this.webDriver = SingletonWebDriverFactory.getWebDriver();
-  }
-
-  @AfterMethod
-  public void tearDown() {
-    SingletonWebDriverFactory.closeDriver();
-  }
 
   @Test(dataProvider = "invalidUsername")
   void shouldFailLoginWithInvalidUsername(String username, String password) {
@@ -73,7 +58,7 @@ public class LoginFailureTest {
   }
 
   private LoginPage getLoginPageWithCredentials(String username, String password) {
-    LoginPage loginPage = new LoginPage(webDriver);
+    LoginPage loginPage = new LoginPage();
     loginPage.openPage();
 
     loginPage.setUsername(username);

@@ -1,6 +1,7 @@
 package com.github.PiotrDuma.page;
 
 import com.github.PiotrDuma.utils.propertyreader.PropertyReader;
+import com.github.PiotrDuma.webdriver.SingletonWebDriverFactory;
 import java.time.Duration;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -24,8 +25,9 @@ public abstract class BasePage {
   @FindBy(xpath = "//div[@class='h-full']")
   private WebElement loadingImage;
 
-  protected BasePage(WebDriver driver) {
-    this.driver = driver;
+  protected BasePage() {
+    this.driver = SingletonWebDriverFactory.getWebDriver();
+    ;
     this.wait = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS));
     PageFactory.initElements(driver, this);
   }

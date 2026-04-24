@@ -4,12 +4,9 @@ import com.github.PiotrDuma.page.email.InboxPage;
 import com.github.PiotrDuma.page.email.module.MessageWindow;
 import com.github.PiotrDuma.page.login.LoginPage;
 import com.github.PiotrDuma.utils.listener.TestListener;
-import com.github.PiotrDuma.webdriver.SingletonWebDriverFactory;
 import lombok.extern.slf4j.Slf4j;
 import static org.assertj.core.api.Assertions.assertThat;
-import org.openqa.selenium.WebDriver;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -18,39 +15,35 @@ import org.testng.annotations.Test;
 @Slf4j
 public class LoginAndSendEmailSuccessTest {
 
-  protected WebDriver webDriver;
+  private static final String LOGIN = "test_user_epam_1234@proton.me";
+  private static final String PASSWORD = "<a1b2c3d4>";
 
-  @BeforeClass
-  public void setup() {
-    this.webDriver = SingletonWebDriverFactory.getWebDriver();
-  }
+  LoginPage loginPage;
+  InboxPage inboxPage;
 
-  @AfterClass
-  public void tearDown() {
-    SingletonWebDriverFactory.closeDriver();
-  }
-
-  @Test(dataProvider = "credentials")
-  void shouldSuccessfullyLoginWithValidCredentials(String username, String password) {
-    log.info(String.format("Test login with valid credentials: %s AND %s", username, password));
-    LoginPage loginPage = new LoginPage(webDriver);
+  @BeforeMethod
+  void logIn() {
+    loginPage = new LoginPage();
     loginPage.openPage();
 
-    loginPage.setUsername(username);
-    loginPage.setPassword(password);
-    InboxPage inboxPage = loginPage.clickSignInToLogin();
+    loginPage.setUsername(LOGIN);
+    loginPage.setPassword(PASSWORD);
+    inboxPage = loginPage.clickSignInToLogin();
+  }
+
+  @Test
+  void shouldSuccessfullyLoginWithValidCredentials() {
+    log.info(String.format("Test login with valid credentials: %s AND %s", LOGIN, PASSWORD));
 
     assertThat(inboxPage.getEmailSpanText())
         .as("Check if login succeed by unique email selector")
-        .isEqualTo(username);
+        .isEqualTo(LOGIN);
   }
 
-  @Test(dependsOnMethods = "shouldSuccessfullyLoginWithValidCredentials", dataProvider = "email")
+  @Test(dataProvider = "email")
   void shouldOpenNewMessageWindowAndFillTextFields(String recipient, String subject,
       String message) {
     log.info("Create Email Test invoked");
-    InboxPage inboxPage = new InboxPage(webDriver);
-    inboxPage.openPage();
 
     MessageWindow messageWindow = inboxPage.getMessageWindow();
 
@@ -67,15 +60,6 @@ public class LoginAndSendEmailSuccessTest {
     assertThat(messageWindow.getMessage())
         .as("Check if message field is filled correctly")
         .isEqualTo(message);
-  }
-
-
-  @DataProvider(name = "credentials")
-  public Object[][] getCredentials() {
-    log.info("Access credentials data");
-    return new Object[][]{
-        {"test_user_epam_1234@proton.me", "<a1b2c3d4>"}
-    };
   }
 
   @DataProvider(name = "email")

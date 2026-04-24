@@ -5,7 +5,6 @@ import com.github.PiotrDuma.page.email.InboxPage;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -30,8 +29,8 @@ public class LoginPage extends BasePage {
   @FindBy(css = "div[data-testid=\"login:error-block\"]")
   WebElement errorMessage;
 
-  public LoginPage(WebDriver driver) {
-    super(driver);
+  public LoginPage() {
+    super();
     log.info("Init login page");
   }
 
@@ -62,7 +61,7 @@ public class LoginPage extends BasePage {
 
   public InboxPage clickSignInToLogin() {
     clickSignInButton();
-    return new InboxPage(driver);
+    return new InboxPage();
   }
 
   public boolean isLoginMessageDisplayed() {
