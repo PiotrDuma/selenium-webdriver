@@ -1,23 +1,31 @@
 package com.github.PiotrDuma.page.login;
 
-import com.github.PiotrDuma.page.AbstractPageObject;
-import com.github.PiotrDuma.page.email.EmailPage;
+import com.github.PiotrDuma.page.BasePage;
+import com.github.PiotrDuma.page.email.InboxPage;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class LoginPage extends AbstractPageObject {
+@Slf4j
+public class LoginPage extends BasePage {
 
-  private static final Logger log = LoggerFactory.getLogger(LoginPage.class);
-  private static final String URL_KEY = "page.login.url";
-  @FindBy(id = "username")
+  private static final String URL = "https://account.proton.me/mail";
+  private static final String USERNAME_FIELD = "username";
+  private static final String PASSWORD_FIELD = "password";
+  private static final String SIGN_IN_BUTTON = "button[type='submit']";
+  @FindBy(id = USERNAME_FIELD)
   private WebElement loginField;
-  @FindBy(id = "password")
+  @FindBy(id = PASSWORD_FIELD)
   private WebElement passwordField;
-  @FindBy(css = "button[type='submit']")
+  @FindBy(css = SIGN_IN_BUTTON)
   private WebElement signInButton;
+  @FindBy(id = "id-4")
+  private WebElement loginErrorMessage;
+  @FindBy(id = "id-5")
+  private WebElement passwordErrorMessage;
+  @FindBy(css = "div[data-testid=\"login:error-block\"]")
+  private WebElement errorMessage;
 
   public LoginPage(WebDriver driver) {
     super(driver);
@@ -25,19 +33,47 @@ public class LoginPage extends AbstractPageObject {
   }
 
   @Override
-  public AbstractPageObject openPage() {
-    log.info("open login page");
-    String url = loadVariable(URL_KEY);
-    driver.navigate().to(url);
+  public LoginPage openPage() {
+    log.info(String.format("Open login page: %s", URL));
+    driver.navigate().to(URL);
     return this;
   }
 
-  public EmailPage login(String username, String password) {
+  public void setUsername(String username) {
+    log.info(String.format("Fill '%s' field with value %s", USERNAME_FIELD, username));
     waitForLoadingElementToDisappear();
-    waitForElementToLoad(loginField);
     fillElementWithText(loginField, username);
+  }
+
+  public void setPassword(String password) {
+    log.info(String.format("Fill '%s' field with value %s", PASSWORD_FIELD, password));
+    waitForLoadingElementToDisappear();
     fillElementWithText(passwordField, password);
+  }
+
+  public void clickSignInButton() {
+    log.info(String.format("Click on '%s' button to sign in", SIGN_IN_BUTTON));
+    waitForLoadingElementToDisappear();
     clickElement(signInButton);
-    return new EmailPage(driver);
+  }
+
+  public InboxPage clickSignInToLogin() {
+    clickSignInButton();
+    return new InboxPage(driver);
+  }
+
+  public boolean isLoginMessageDisplayed() {
+    super.waitForElementToLoad(loginErrorMessage);
+    return loginErrorMessage.isDisplayed();
+  }
+
+  public boolean isPasswordMessageDisplayed() {
+    super.waitForElementToLoad(passwordErrorMessage);
+    return passwordErrorMessage.isDisplayed();
+  }
+
+  public boolean isErrorMessageDisplayed() {
+    super.waitForElementToLoad(errorMessage);
+    return errorMessage.isDisplayed();
   }
 }

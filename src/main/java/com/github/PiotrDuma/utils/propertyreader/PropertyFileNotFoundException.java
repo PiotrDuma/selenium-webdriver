@@ -1,4 +1,4 @@
-package com.github.PiotrDuma.utils.PropertyReader;
+package com.github.PiotrDuma.utils.propertyreader;
 
 public class PropertyFileNotFoundException extends RuntimeException {
 

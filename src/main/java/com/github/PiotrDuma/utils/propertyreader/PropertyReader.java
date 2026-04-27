@@ -1,15 +1,14 @@
-package com.github.PiotrDuma.utils.PropertyReader;
+package com.github.PiotrDuma.utils.propertyreader;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
 import java.util.Properties;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class PropertyReader {
 
-  private static final Logger log = LoggerFactory.getLogger(PropertyReader.class);
   private static final String FILE_EXCEPTION = "Failed to load '%s' file.";
   private static final String PROPERTY_EXCEPTION = "Failed to load property with given key: %s";
   private static final String CONFIG_VARIABLE = "config";

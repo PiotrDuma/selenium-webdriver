@@ -1,0 +1,94 @@
+package com.github.PiotrDuma.tests;
+
+import com.github.PiotrDuma.page.login.LoginPage;
+import com.github.PiotrDuma.utils.listener.TestListener;
+import com.github.PiotrDuma.webdriver.SingletonWebDriverFactory;
+import lombok.extern.slf4j.Slf4j;
+import static org.assertj.core.api.Assertions.assertThat;
+import org.openqa.selenium.WebDriver;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
+import org.testng.annotations.Test;
+
+@Listeners(TestListener.class)
+@Slf4j
+public class LoginFailureTest {
+
+  protected WebDriver webDriver;
+
+  @BeforeMethod
+  public void setup() {
+    this.webDriver = SingletonWebDriverFactory.getWebDriver();
+  }
+
+  @AfterMethod
+  public void tearDown() {
+    SingletonWebDriverFactory.closeDriver();
+  }
+
+  @Test(dataProvider = "invalidUsername")
+  void shouldFailLoginWithInvalidUsername(String username, String password) {
+    log.info(String.format("Test login with invalid username: %s AND %s", username, password));
+    LoginPage loginPage = setCredentialsAndClickLogin(username, password);
+    loginPage.clickSignInButton();
+
+    assertThat(loginPage.isErrorMessageDisplayed())
+        .as("Check if login failed - invalid username")
+        .isTrue();
+  }
+
+  @Test(dataProvider = "invalidPassword")
+  void shouldFailLoginWithInvalidPassword(String username, String password) {
+    log.info(String.format("Test login with invalid password: %s AND %s", username, password));
+    LoginPage loginPage = setCredentialsAndClickLogin(username, password);
+
+    assertThat(loginPage.isErrorMessageDisplayed())
+        .as("Check if login failed - invalid password")
+        .isTrue();
+  }
+
+  @Test(dataProvider = "invalidUsername")
+  void shouldFailLoginWithBlankUsername(String username, String password) {
+    log.info(String.format("Test login with invalid username: %s AND %s", username, password));
+    LoginPage loginPage = setCredentialsAndClickLogin("", password);
+
+    assertThat(loginPage.isLoginMessageDisplayed())
+        .as("Check if login failed - blank username")
+        .isTrue();
+  }
+
+  @Test(dataProvider = "invalidPassword")
+  void shouldFailLoginWithBlankPassword(String username, String password) {
+    log.info(String.format("Test login with invalid username: %s AND %s", username, password));
+    LoginPage loginPage = setCredentialsAndClickLogin(username, "");
+
+    assertThat(loginPage.isPasswordMessageDisplayed())
+        .as("Check if login failed - blank password")
+        .isTrue();
+  }
+
+  private LoginPage setCredentialsAndClickLogin(String username, String password) {
+    LoginPage loginPage = new LoginPage(webDriver);
+    loginPage.openPage();
+
+    loginPage.setUsername(username);
+    loginPage.setPassword(password);
+    return loginPage;
+  }
+
+  @DataProvider(name = "invalidUsername")
+  public Object[][] getInvalidUsernameCredentials() {
+    return new Object[][]{
+        {"test_user_epam_1234_invalid@proton.me", "<a1b2c3d4>"}
+    };
+  }
+
+  @DataProvider(name = "invalidPassword")
+  public Object[][] getInvalidPasswordCredentials() {
+    return new Object[][]{
+        {"test_user_epam_1234@proton.me", "<12345678>"}
+    };
+  }
+}
