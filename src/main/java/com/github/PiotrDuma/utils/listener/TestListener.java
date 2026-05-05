@@ -1,24 +1,36 @@
-package com.github.PiotrDuma.utils.TestListener;
+package com.github.PiotrDuma.utils.listener;
 
 import com.github.PiotrDuma.webdriver.SingletonWebDriverFactory;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
+@Slf4j
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class TestListener implements ITestListener {
 
-  private static final Logger log = LoggerFactory.getLogger(TestListener.class);
-  private static final String TIMESTAMP_FORMAT = "yyyy_MM_dd-HH_mm_ss";
-  private static final String SCREENSHOT_PATH = "screenshots/";
+  static final String TIMESTAMP_FORMAT = "yyyy_MM_dd-HH_mm_ss";
+  static final String SCREENSHOT_PATH = "screenshots/";
+
+  @Override
+  public void onTestSuccess(ITestResult result) {
+    closeDriver();
+  }
+
+  @Override
+  public void onTestSkipped(ITestResult result) {
+    closeDriver();
+  }
 
   @Override
   public void onTestFailure(ITestResult result) {
@@ -31,6 +43,8 @@ public class TestListener implements ITestListener {
     } catch (IOException e) {
       log.error("Screenshot save failure.");
       throw new RuntimeException(e);
+    } finally {
+      closeDriver();
     }
   }
 
@@ -51,5 +65,9 @@ public class TestListener implements ITestListener {
 
   private static String getTimestamp() {
     return new SimpleDateFormat(TIMESTAMP_FORMAT).format(new Date());
+  }
+
+  private static void closeDriver() {
+    SingletonWebDriverFactory.closeDriver();
   }
 }
