@@ -22,6 +22,12 @@ public abstract class BasePage<T extends BasePage<T>> extends BaseObject {
     this.url = url;
   }
 
+  @Override
+  protected void waitForElementToLoad(WebElement element) {
+    waitForLoadingImageToDisappear();
+    super.waitForElementToLoad(element);
+  }
+
   public T openPage() {
     log.info(String.format("Open page: %s", url));
     slowMode();
